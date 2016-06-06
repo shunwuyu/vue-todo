@@ -2,9 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="dist/css/font-awesome.min.css">
+    <link rel="stylesheet" href="dist/css/style.css">
     <title>Todo list</title>
 </head>
 <body>
+    <div id="app" class="container">
+        <div class="todo-wrapper">
+            <todo-header></todo-header>
+            <div class="todo-content">
+                <div class="todo-content-title">
+                    <h2>Your tasks</h2>
+                    <p class="task-report"><span class="task-remain">1</span> / 3 tasks</p>
+                </div>
 
+                <todo-list :collection="listState.items"></todo-list>
+            </div>
+        </div>
+    </div>
+
+    <template id="todo-header">
+        <div class="todo-header">
+            <time class="clearfix">
+                <span class="day">{{ date }}</span>
+                <span class="dayofweek">{{ weekDay }}</span>
+                <span class="month">{{ month }}</span>
+            </time>
+            <div class="add-circle" @click="add">
+                <i class="fa fa-plus"></i>
+            </div>
+        </div>
+    </template>
+
+    <template id="todo-list">
+        <ul class="todo-list">
+            <todo-item v-for="item in collection" :model="item"></todo-item>
+        </ul>
+    </template>
+
+    <template id="todo-item">
+        <li class="todo-item" :class="{'editing': model.isEditing}">
+            <span class="label {{ model.label }}"></span>
+
+            <p class="text" v-if="model.isEditing">
+                <input type="text" placeholder="Type a new task and hit enter">
+            </p>
+
+            <p class="text" v-if="model.isEditing == false || model.isEditing == null">{{ model.text }}</p>
+
+            <!-- Task action -->
+            <div class="todo-action">
+                 <span class="more">
+                   <span></span><span></span><span></span>
+                 </span>
+
+                <ul class="action-list">
+                    <li>Mark done</li>
+                    <li>Edit</li>
+                    <li>Delete</li>
+                </ul>
+            </div>
+        </li>
+        <!-- End .task-action -->
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="dist/js/script.js"></script>
 </body>
 </html>
