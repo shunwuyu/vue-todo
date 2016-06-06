@@ -5,18 +5,7 @@
 
     var ListStore = {
         state: {
-            items: [
-                {
-                    text: 'Sprint meeting',
-                    status: 'undone',
-                    label: 'urgent'
-                },
-                {
-                    text: 'Have lunch with Evan You & Bill Gates',
-                    status: 'done',
-                    label: 'normal'
-                }
-            ]
+            items: []
         },
         newItem: function(text, status, label) {
             this.state.items.unshift({ text: text, status: status, label: label, isEditing: true });
@@ -59,11 +48,77 @@
     });
 
     /**
+     * Report Component
+     */
+    var Report = Vue.extend({
+        template: '#todo-report',
+        data: function() {
+            return {
+                listState: ListStore.state
+            }
+        },
+        computed: {
+            taskRemain: function() {
+                return this.listState.items.length;
+            }
+        }
+    });
+
+    /**
      * Item component
      */
     var TodoItem = Vue.extend({
         template: '#todo-item',
-        props: ['model']
+        props: ['model'],
+        data: function() {
+            return {
+                tempText: '',
+            }
+        },
+        computed: {
+            isDone: function() {
+                return this.model.status == "done" ? true : false;
+            }
+        },
+        methods: {
+            save: function() {
+                this.model.text = this.tempText;
+                this.model.isEditing = false;
+
+                // local storage
+                ListStore.push();
+            },
+            markDone: function() {
+                this.model.status = "done"
+
+                // local storage
+                ListStore.push();
+            },
+            edit: function() {
+                this.model.isEditing = true;
+                this.$nextTick(function() {
+                    $(this.$el).find('input').focus();
+                });
+                this.tempText = this.model.text;
+            },
+            delete: function() {
+                this.$dispatch('item-deleted', this.model);
+                this.$nextTick(function() {
+                    ListStore.push();
+                });
+            },
+            showAction: function(event) {
+                var target = $(event.currentTarget);
+                var actionList = target.find('.action-list');
+        
+                if(actionList.hasClass('show')) {
+                    actionList.removeClass('show');
+                } else {
+                    $('.action-list').removeClass('show');
+                    actionList.addClass('show');
+                }   
+            }
+        }
     });
 
 
@@ -75,6 +130,11 @@
         props: ['collection'],
         components: {
             'todo-item': TodoItem
+        },
+        events: {
+            'item-deleted': function(model) {
+                this.collection.$remove(model);
+            } 
         }
     });
 
@@ -85,8 +145,12 @@
                 listState: ListStore.state
             }
         },
+        ready: function() {
+            ListStore.load();           
+        },
         components: {
             'todo-header': Header,
+            'todo-report': Report,
             'todo-list': TodoList
         }
     })

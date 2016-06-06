@@ -11,16 +11,13 @@
         <div class="todo-wrapper">
             <todo-header></todo-header>
             <div class="todo-content">
-                <div class="todo-content-title">
-                    <h2>Your tasks</h2>
-                    <p class="task-report"><span class="task-remain">1</span> / 3 tasks</p>
-                </div>
-
+                <todo-report></todo-report>
                 <todo-list :collection="listState.items"></todo-list>
             </div>
         </div>
     </div>
-
+    
+    <!-- Todo Header -->
     <template id="todo-header">
         <div class="todo-header">
             <time class="clearfix">
@@ -33,33 +30,43 @@
             </div>
         </div>
     </template>
-
+    
+    <!-- Todo Report -->
+    <template id="todo-report">
+        <div class="todo-content-title">
+            <h2>Your tasks</h2>
+            <p class="task-report"><span class="task-remain">1</span> / {{ taskRemain }} tasks</p>
+        </div>
+    </template>
+    
+    <!-- Todo List -->
     <template id="todo-list">
         <ul class="todo-list">
             <todo-item v-for="item in collection" :model="item"></todo-item>
         </ul>
     </template>
-
+    
+    <!-- Todo Item -->
     <template id="todo-item">
-        <li class="todo-item" :class="{'editing': model.isEditing}">
+        <li class="todo-item" :class="{'editing': model.isEditing, 'task-done': isDone}">
             <span class="label {{ model.label }}"></span>
 
             <p class="text" v-if="model.isEditing">
-                <input type="text" placeholder="Type a new task and hit enter">
+                <input type="text" v-model="tempText" placeholder="Type a new task and hit enter" @keyup.enter="save">
             </p>
 
             <p class="text" v-if="model.isEditing == false || model.isEditing == null">{{ model.text }}</p>
 
             <!-- Task action -->
-            <div class="todo-action">
+            <div class="todo-action" @click="showAction" v-if="model.isEditing == false || model.isEditing == null">
                  <span class="more">
                    <span></span><span></span><span></span>
                  </span>
 
                 <ul class="action-list">
-                    <li>Mark done</li>
-                    <li>Edit</li>
-                    <li>Delete</li>
+                    <li @click="markDone" v-if="!isDone">Mark done</li>
+                    <li @click="edit" v-if="!isDone">Edit</li>
+                    <li @click="delete">Delete</li>
                 </ul>
             </div>
         </li>
