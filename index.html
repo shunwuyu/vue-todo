@@ -36,7 +36,7 @@
     <template id="todo-report">
         <div class="todo-content-title">
             <h2>Your tasks</h2>
-            <p class="task-report"><span class="task-remain">{{ taskDone }} done</span> / {{ taskTotal }} tasks</p>
+            <p class="task-report"><span class="task-remain">{{ taskDone }} done</span> / {{ taskTotal }} task(s)</p>
         </div>
     </template>
     
@@ -50,13 +50,19 @@
     <!-- Todo Item -->
     <template id="todo-item">
         <li class="todo-item" :class="{'editing': model.isEditing, 'task-done': isDone}">
-            <span class="label {{ model.label }}"></span>
+            <span @click="showLabel" class="label {{ model.label }}">
+                <ul class="action-pick-label action-popup">
+                    <li @click="saveLabel('urgent')" class="important">Important</li>
+                    <li @click="saveLabel('normal')" class="normal">Normal</li>
+                    <li @click="saveLabel('other')" class="other">Whatever</li>
+                </ul>
+            </span>
 
             <p class="text" v-if="model.isEditing">
                 <input type="text" v-model="tempText" placeholder="Type a new task and hit enter" @keyup.enter="save">
             </p>
 
-            <p class="text" v-if="model.isEditing == false || model.isEditing == null">{{ model.text }}</p>
+            <p class="text" v-if="model.isEditing == false">{{ model.text }}</p>
 
             <!-- Task action -->
             <div class="todo-action" @click="showAction" v-if="model.isEditing == false || model.isEditing == null">
@@ -64,7 +70,7 @@
                    <span></span><span></span><span></span>
                  </span>
 
-                <ul class="action-list">
+                <ul class="action-list action-popup">
                     <li @click="markDone" v-if="!isDone">Mark done</li>
                     <li @click="edit" v-if="!isDone">Edit</li>
                     <li @click="delete">Delete</li>

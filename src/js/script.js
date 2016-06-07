@@ -43,8 +43,8 @@
             this.year = d.getFullYear();
         },
         methods: {
-            add: function() {
-                ListStore.newItem('Type a new task and hit enter', 'undone', 'urgent');
+            add: function(event) {
+                ListStore.newItem('Type a new task and hit enter', 'undone', 'normal');
             }
         }
     });
@@ -123,6 +123,7 @@
                 });
             },
             showAction: function(event) {
+                event.stopPropagation();
                 var target = $(event.currentTarget);
                 var actionList = target.find('.action-list');
         
@@ -132,6 +133,24 @@
                     $('.action-list').removeClass('show');
                     actionList.addClass('show');
                 }   
+            },
+            showLabel: function(event) {
+                event.stopPropagation();
+                var target = $(event.currentTarget);
+                var actionList = target.find('.action-popup');
+        
+                if(actionList.hasClass('show')) {
+                    actionList.removeClass('show');
+                } else {
+                    $('.action-popup').removeClass('show');
+                    actionList.addClass('show');
+                }   
+            },
+            saveLabel: function(type) {
+                this.model.label = type;
+
+                // local storage
+                ListStore.push();
             }
         }
     });
@@ -163,6 +182,15 @@
         ready: function() {
             ListStore.load();           
         },
+        created: function() {
+            window.addEventListener('click', this.hideAction);
+        },
+        methods: {
+            /* Hide task action */
+            hideAction: function() {
+                $('.action-popup').removeClass('show');
+            }
+        }, 
         components: {
             'todo-header': Header,
             'todo-report': Report,

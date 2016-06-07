@@ -6,6 +6,7 @@ $base_color: #ff3c41;
 $base_dark: #4C4646;
 $label_urgent_color: #ff3c41;
 $label_normal_color: #37EAA0;
+$label_other_color: #3772FD;
 $header_image: 'https://images.unsplash.com/photo-1440613905118-99b921706b5c?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=255b304482a2f50d0917f3de7b06251e';
 
 
@@ -135,6 +136,41 @@ body {
         color: #ccc;
       }
     }
+    .text {
+      margin-top: -2px;
+      padding-left: 26px;
+      padding-right: 35px;
+    }
+    .action-popup {
+      position: absolute;
+      right: 0px;
+      top: 23px;
+      border: 1px solid #EFEFEF;
+      list-style: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 4px 7px rgba(0,0,0,.1);
+      display: none;
+      z-index: 99999; 
+      &.show {
+        display: block;
+      }
+      li {
+        padding: 3px 5px;
+        margin: 5px 0;
+        cursor: pointer;
+        white-space: nowrap;
+        font-size: .9em;
+        border-radius: 3px;
+        i {
+          margin-right: 5px;
+        }
+        &:hover {
+          background: #f5f5f5;
+        }
+      }
+    }
     .label {
       display: inline-block;
       background: $base_color;
@@ -143,15 +179,35 @@ body {
       border-radius: 50%;
       float: left;
       margin-right: 10px;
+      position: relative;
+      cursor: pointer;
       &.normal {
         background: $label_normal_color;
       }
-    }
-    .text {
-      position: relative;
-      top: -2px;
-      padding-left: 26px;
-      padding-right: 35px;
+      &.other {
+        background: $label_other_color;
+      }
+      .action-pick-label {
+        left: 0;
+        width: 140px;
+        li {
+          color: white;
+          font-weight: 700;
+          text-shadow: 0 1px 1px rgba(0,0,0,.2);
+          &:hover {
+            opacity: .8;
+          }
+        }
+        .important {
+          background: $label_urgent_color;
+        }
+        .normal {
+          background: $label_normal_color
+        }
+        .other {
+          background: $label_other_color
+        }
+      }
     }
     /* Task actions */
     .todo-action {
@@ -174,40 +230,9 @@ body {
           }
         }
       }
-      .action-list {
-        position: absolute;
-        right: 0px;
-        top: 23px;
-        border: 1px solid #ccc;
-        list-style: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        background: #fff;
-        box-shadow: 0 4px 7px rgba(0,0,0,.1);
-        display: none;
-        z-index: 99999; 
-        &.show {
-          display: block;
-        }
-        li {
-          padding: 3px 5px;
-          margin: 5px 0;
-          cursor: pointer;
-          white-space: nowrap;
-          font-size: .9em;
-          i {
-            margin-right: 5px;
-          }
-          &:hover {
-            background: #f5f5f5;
-            border-radius: 3px;
-          }
-        }
-      }
     }
     /* Editing mode */
     &.editing {
-      background: #F9FFDC;
       input {
         border: none;
         font-family: inherit;
