@@ -20,10 +20,11 @@
     <!-- Todo Header -->
     <template id="todo-header">
         <div class="todo-header">
+            <div class="overlay"></div>
             <time class="clearfix">
                 <span class="day">{{ date }}</span>
                 <span class="dayofweek">{{ weekDay }}</span>
-                <span class="month">{{ month }}</span>
+                <span class="month">{{ month }}, {{ year }}</span>
             </time>
             <div class="add-circle" @click="add">
                 <i class="fa fa-plus"></i>
@@ -35,7 +36,7 @@
     <template id="todo-report">
         <div class="todo-content-title">
             <h2>Your tasks</h2>
-            <p class="task-report"><span class="task-remain">1</span> / {{ taskRemain }} tasks</p>
+            <p class="task-report"><span class="task-remain">{{ taskDone }} done</span> / {{ taskTotal }} tasks</p>
         </div>
     </template>
     

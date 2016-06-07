@@ -6,7 +6,7 @@ $base_color: #ff3c41;
 $base_dark: #4C4646;
 $label_urgent_color: #ff3c41;
 $label_normal_color: #37EAA0;
-$header_image: 'https://images.unsplash.com/photo-1452827073306-6e6e661baf57?crop=entropy&fit=crop&fm=jpg&h=975&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1925';
+$header_image: 'https://images.unsplash.com/photo-1440613905118-99b921706b5c?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=255b304482a2f50d0917f3de7b06251e';
 
 
 * { margin: 0; padding: 0 }
@@ -46,11 +46,23 @@ body {
   border-radius: 6px 6px 0 0;
   background: url($header_image) no-repeat;
   background-size: cover;
-  padding: 35px 20px;
+  padding: 55px 20px;
   position: relative;
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.2); /* fallback for old browsers */
+    //background: -webkit-linear-gradient(to left, rgba(85,98,112,0.5) , rgba(255,107,107,0.5)); /* Chrome 10-25, Safari 5.1-6 */
+    //background: linear-gradient(to left, rgba(85,98,112,0.5) , rgba(255,107,107,0.5)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border-radius: 6px 6px 0 0;
+  }
   time {
     color: white;
     display: block;
+    position: relative;
     .day {
       font-size: 4em;
       float: left;
@@ -107,6 +119,7 @@ body {
     .task-report {
       font-size: 0.9em;
       color: #afafaf;
+      margin-top: 5px;
     }
   }
 }

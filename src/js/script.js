@@ -31,7 +31,8 @@
             return {
                 date: '',
                 weekDay: '',
-                month: ''
+                month: '',
+                year: ''
             }
         },
         ready: function() {
@@ -39,10 +40,11 @@
             this.date = d.getDate();
             this.weekDay = weekday[d.getDay()];
             this.month = month[d.getMonth()];
+            this.year = d.getFullYear();
         },
         methods: {
             add: function() {
-                ListStore.newItem('Type a new task and hit enter', 'editing', 'urgent');
+                ListStore.newItem('Type a new task and hit enter', 'undone', 'urgent');
             }
         }
     });
@@ -58,7 +60,18 @@
             }
         },
         computed: {
-            taskRemain: function() {
+            taskDone: function() {
+                var total = 0;
+                if(this.listState.items.length > 0) {
+                    for(var i = 0; i < this.listState.items.length; i++) {
+                         if(this.listState.items[i].status == "done") {
+                             total++;
+                         }
+                    }
+                }
+                return total;
+            },
+            taskTotal: function() {
                 return this.listState.items.length;
             }
         }
@@ -82,11 +95,13 @@
         },
         methods: {
             save: function() {
-                this.model.text = this.tempText;
-                this.model.isEditing = false;
+                if(this.tempText != '') {
+                    this.model.text = this.tempText;
+                    this.model.isEditing = false;
 
-                // local storage
-                ListStore.push();
+                    // local storage
+                    ListStore.push();
+                }
             },
             markDone: function() {
                 this.model.status = "done"
