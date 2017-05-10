@@ -9,14 +9,14 @@
 <body>
     <div id="app" class="container">
         <div class="todo-wrapper">
-            <todo-header></todo-header>
-            <div class="todo-content">
-                <todo-report></todo-report>
-                <todo-list :collection="listState.items"></todo-list>
-            </div>
+          <todo-header></todo-header>
+          <div class="todo-content">
+              <todo-report></todo-report>
+              <todo-list :collection="listState.items"></todo-list>
+          </div>
         </div>
     </div>
-    
+
     <!-- Todo Header -->
     <template id="todo-header">
         <div class="todo-header">
@@ -31,7 +31,7 @@
             </div>
         </div>
     </template>
-    
+
     <!-- Todo Report -->
     <template id="todo-report">
         <div class="todo-content-title">
@@ -39,16 +39,17 @@
             <p class="task-report"><span class="task-remain">{{ taskDone }} done</span> / {{ taskTotal }} task(s)</p>
         </div>
     </template>
-    
+
     <!-- Todo List -->
     <template id="todo-list">
         <ul class="todo-list">
             <todo-item v-for="item in collection" :model="item"></todo-item>
         </ul>
     </template>
-    
+
     <!-- Todo Item -->
     <template id="todo-item">
+      fdafafdasfd
         <li class="todo-item" :class="{'editing': model.isEditing, 'task-done': isDone}">
             <span @click="showLabel" class="label {{ model.label }}">
                 <ul class="action-pick-label action-popup">
@@ -79,8 +80,7 @@
         </li>
         <!-- End .task-action -->
     </template>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
+    <script src="http://cdn.bootcss.com/vue/2.3.2/vue.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="dist/js/script.js"></script>
 </body>
