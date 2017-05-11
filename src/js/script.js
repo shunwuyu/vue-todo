@@ -22,20 +22,6 @@
       }
   }
 
-  var TodoItem = Vue.extend({
-    template: '#todo-item',
-    data: function() {
-      return {
-        tempText: ''
-      }
-    },
-    computed() {
-      isDone: function() {
-          return this.model.status == "done" ? true : false;
-      }
-    }
-  })
-
   var Report = Vue.extend({
       template: '#todo-report',
       data: function() {
@@ -84,6 +70,98 @@
           }
       }
   });
+
+  var TodoItem = Vue.extend({
+        template: '#todo-item',
+        props: ['model'],
+        data: function() {
+            return {
+                tempText: '',
+            }
+        },
+        computed: {
+            isDone: function() {
+                return this.model.status == "done" ? true : false;
+            }
+        },
+        methods: {
+            save: function() {
+                if(this.tempText != '') {
+                    this.model.text = this.tempText;
+                    this.model.isEditing = false;
+
+                    // local storage
+                    ListStore.push();
+                }
+            },
+            markDone: function() {
+                this.model.status = "done"
+
+                // local storage
+                ListStore.push();
+            },
+            edit: function() {
+                this.model.isEditing = true;
+                this.$nextTick(function() {
+                    $(this.$el).find('input').focus();
+                });
+                this.tempText = this.model.text;
+            },
+            showAction: function(event) {
+                event.stopPropagation();
+                var target = $(event.currentTarget);
+                var actionList = target.find('.action-list');
+
+                if(actionList.hasClass('show')) {
+                    actionList.removeClass('show');
+                } else {
+                    $('.action-list').removeClass('show');
+                    actionList.addClass('show');
+                }
+            },
+            showLabel: function(event) {
+              event.stopPropagation();
+              var target = $(event.currentTarget);
+              var actionList = target.find('.action-popup');
+              if(actionList.hasClass('show')) {
+                 actionList.removeClass('show');
+              } else {
+                 $('.action-popup').removeClass('show');
+                 actionList.addClass('show');
+              }
+            },
+            saveLabel: function(type) {
+
+                this.model.label = type;
+                // local storage
+                ListStore.push();
+            },
+            delTask() {
+              this.$emit('aaa', this.model)
+            }
+        }
+    });
+
+    var TodoList = Vue.extend({
+         template: '#todo-list',
+         props: ['collection'],
+         methods: {
+             itemDeleted: function(model) {
+               console.log(this.collection);
+               console.log(model);
+               for(var i = 0; i < this.collection.length; i++) {
+                 if( this.collection[i] == model ) {
+                   this.collection.splice(i,1);
+                 }
+               }
+               ListStore.push();
+                //  this.collection.$remove(model);
+             }
+         },
+         components: {
+             'todo-item': TodoItem
+         }
+     });
 
   var todo = new Vue({
       el: '#app',
